@@ -1,0 +1,17 @@
+{
+  "name": "angular-gpt",
+  "version": "1.0.0",
+  "description": "Angular Nest OpenAI Monorepo",
+  "main": "index.js",
+  "scripts": {
+    "dev": "turbo dev"
+  },
+  "author": "Gerardo Rodriguez",
+  "license": "ISC",
+  "workspaces": [
+    "apps/*"
+  ],
+  "devDependencies": {
+    "turbo": "^1.11.3"
+  }
+}

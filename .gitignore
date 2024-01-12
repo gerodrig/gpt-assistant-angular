@@ -1,0 +1,8 @@
+# VS Code config files
+.vscode
+
+# Node.js runtime environment
+node_modules
+
+#Turbo Config files
+.turbo
