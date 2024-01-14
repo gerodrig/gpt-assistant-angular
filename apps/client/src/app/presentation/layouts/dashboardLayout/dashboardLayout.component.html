@@ -1,0 +1,33 @@
+<main class="flex flex-col sm:flex-row mt-7">
+  <nav
+    class="hidden sm:flex flex-col ml-5 w-[370px] min-h-[calc(100vh-3.0rem)] bg-white p-5 rounded-3xl"
+  >
+    <h1 class="text-lg font-bold text-transparent lg:text-3xl bg-gradient-to-br from-[#ed091b] via-[#ef32d1] to-[#8006fb] bg-clip-text">
+      AngularGPT<span class="text-red-800">.</span>
+    </h1>
+    <span class="mb-2 text-lg text-black">Welcome</span>
+    <div class="my-4 border border-[#ed091b]"></div>
+
+       <!-- Nav Links -->
+       @for (route of routes; track route.path){
+        <app-sidebar-menu-item 
+          [description]="route.data!['description']"
+          [icon]="route.data!['icon']"
+          [title]="route.data!['title']"
+          [path]="route.path!"
+        />
+       }
+    
+    <!-- End Nav Links -->
+  </nav>
+
+  <section
+    class="mx-3 sm:mx-10 flex flex-col w-full h-[calc(100vh-50px)] bg-gradient-to-r from-[#ed091b] via-[#ef32d1] to-[#8006fb] bg-opacity-80 p-5 rounded-3xl"
+  >
+    <div class="flex flex-row h-full">
+      <div class="flex flex-col flex-auto p-1">
+        <router-outlet />
+      </div>
+    </div>
+  </section>
+</main>

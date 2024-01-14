@@ -1,0 +1,30 @@
+<form
+  [formGroup]="form"
+  (ngSubmit)="handleSubmit()"
+  class="flex flex-row items-center w-full h-16 px-4 bg-white rounded-xl"
+>
+  <div class="mr-3">
+    <button (click)="fileInput.click()" class="flex items-center justify-center text-gray-400">
+      <i class="text-xl fa-solid fa-paperclip"></i>
+    </button>
+    <input type="file" hidden (change)="handleSelectedFile($event)" #fileInput/>
+  </div>
+
+  <div class="flex-grow">
+    <div class="relative w-full">
+      <input
+        type="text"
+        autofocus
+        class="flex w-full h-10 pl-4 text-gray-800 border rounded-xl focus:outline-none focus:border-indigo-300 focus:ring-2 focus:ring-indigo-200"
+        [placeholder]="placeholder"
+        formControlName="prompt"
+      />
+    </div>
+  </div>
+  <div class="ml-4">
+    <button class="btn-primary" type="submit" [disabled]="form.invalid">
+      <span class="mr-2">Send</span>
+      <i class="fa-regular fa-paper-plane"></i>
+    </button>
+  </div>
+</form>
