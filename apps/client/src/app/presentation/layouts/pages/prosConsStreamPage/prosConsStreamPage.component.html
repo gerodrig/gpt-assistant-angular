@@ -1,1 +1,47 @@
-<p>prosConstStreamPage works!</p>
+<div class="chat-container">
+    <div class="chat-messages">
+      <div class="grid gap-y-2">
+        <!-- <span class="text-black">Grammar Checker</span> -->
+        <!-- Chat Messages -->
+        <app-gpt-message
+          text="Hello I am Geppeto, ask what you want to know about the pros and cons of something."
+        />
+  
+        @for (message of messages(); track message.text) {
+          @if(message.isGpt) {
+            <app-gpt-message
+              [text]="message.text"
+            />
+          } @else {
+            <app-my-message
+              [text]="message.text"
+            />
+          }
+        }
+      
+  
+        @if (isLoading()) {
+          <app-typing-loader />
+        }
+      </div>
+    </div>
+    <!-- Message box -->
+    <app-text-message-box
+      placeholder="Enter your text here"
+    [isStreaming]="isStreaming()"
+      (onMessage)="handleMessage($event)"
+    (onStopStreaming)="handleStopStreaming()"
+    />
+
+    <!-- <app-text-message-box-file
+      placeholder="Enter your text here"
+      (onMessage)="handleMessageWithFile($event)"
+    />
+
+    <app-text-message-box-select
+      placeholder="Enter your text here"
+      [options]="[{ id: '1', text: 'one'}]"
+      (onMessage)="handleMessageWithSelect($event)"
+    /> -->
+  </div>
+  

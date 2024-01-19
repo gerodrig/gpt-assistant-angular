@@ -16,10 +16,19 @@
       />
     </div>
   </div>
-  <div class="ml-4">
-    <button class="btn-primary" type="submit" [disabled]="form.invalid">
-      <span class="mr-2">Send</span>
-      <i class="fa-regular fa-paper-plane"></i>
-    </button>
-  </div>
+  @if (!isStreaming) {
+    <div class="ml-4">
+      <button class="btn-primary" type="submit" [disabled]="form.invalid">
+        <span class="mr-2">Send</span>
+        <i class="fa-regular fa-paper-plane"></i>
+      </button>
+    </div>
+  } @else {
+    <div class="ml-4">
+      <button (click)="handleStopStreaming()" class="btn-primary" >
+        <i class="fa-regular fa-circle-stop"></i>
+        <span class="ml-2">Stop</span>
+      </button>
+    </div>
+  }
 </form>

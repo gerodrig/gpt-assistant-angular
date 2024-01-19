@@ -19,6 +19,8 @@ import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 export class TextMessageBoxComponent {
   @Input() public placeholder: string = '';
   @Input() public disableCorrections: boolean = false;
+  @Input() public isStreaming: boolean = false;
+  @Output() public onStopStreaming = new EventEmitter<void>();
   @Output() public onMessage = new EventEmitter<string>();
 
   public fb = inject(FormBuilder);
@@ -26,13 +28,18 @@ export class TextMessageBoxComponent {
     prompt: ['', Validators.required],
   });
 
+  constructor() {}
+
   handleSubmit() {
     if (this.form.invalid) return;
 
     const { prompt } = this.form.value;
-    console.log({prompt});
 
     this.onMessage.emit(prompt ?? '');
     this.form.reset();
+  }
+
+  handleStopStreaming() {
+    this.onStopStreaming.emit();
   }
 }

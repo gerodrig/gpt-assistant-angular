@@ -65,7 +65,6 @@
           },
           "defaultConfiguration": "development",
           "options": {
-            "browserTarget": "client:build",
             "proxyConfig": "proxy.conf.json"
           }
         },

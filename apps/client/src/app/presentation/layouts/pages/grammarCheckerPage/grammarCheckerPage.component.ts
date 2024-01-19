@@ -57,8 +57,8 @@ export default class GrammarCheckerPageComponent {
           }
         ]);
       }
-
       this.isLoading.set(false);
+
     });
 
 
