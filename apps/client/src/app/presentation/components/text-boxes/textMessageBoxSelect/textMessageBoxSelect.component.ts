@@ -4,7 +4,7 @@ import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 
 export type Option = {
     id: string;
-    text: string;
+    name: string;
 }
 
 export type TextMessageBoxEvent = {
