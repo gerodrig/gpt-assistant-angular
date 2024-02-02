@@ -1,9 +1,29 @@
-import { Body, Controller, HttpStatus, Post, Res } from '@nestjs/common';
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Get,
+  HttpStatus,
+  Param,
+  Post,
+  Res,
+  UseInterceptors,
+} from '@nestjs/common';
 import { GptService } from './gpt.service';
-import { GrammarCheckerDto, ProsConsEvaluatorDto, TranslateDto } from './dtos/';
+import {
+  GrammarCheckerDto,
+  ImageGenerationDto,
+  ImageVariationDto,
+  ProsConsEvaluatorDto,
+  SpeechToTextDto,
+  TextToSpeechDto,
+  TranslateDto,
+} from './dtos/';
 import { Response } from 'express';
 import type { Stream } from 'openai/streaming';
 import type { ChatCompletionChunk } from 'openai/resources';
+import { CustomFileInterceptor } from '../interceptors/';
+import { CustomAudioUpload } from './../decorators/';
 
 @Controller('gpt')
 export class GptController {
@@ -60,5 +80,69 @@ export class GptController {
       const result = await this.gptService.translate(translateDto);
       res.status(HttpStatus.OK).json(result);
     }
+  }
+
+  @Get('image-generation/:fileName')
+  async audioGetter(@Param('fileName') fileName: string, @Res() res: Response) {
+    //check that fileName is ending with png
+    const fileExtension = fileName.split('.').pop();
+
+    if (!fileExtension || fileExtension !== 'mp3') {
+      throw new BadRequestException('Invalid file extension, mp3 was expected');
+    }
+
+    const fileStream = await this.gptService.fileGetter(fileName);
+    res.setHeader('Content-Type', 'audio/mp3');
+    fileStream.pipe(res);
+  }
+
+  @Get('text-to-speech/all')
+  async textToSpeechFiles() {
+    return await this.gptService.textToSpeechGetAllFiles();
+  }
+
+  @Post('text-to-speech')
+  async textToSpeech(
+    @Body() textToSpeechDto: TextToSpeechDto,
+    @Res() res: Response,
+  ) {
+    const filePath = await this.gptService.textToSpeech(textToSpeechDto);
+
+    res.setHeader('Content-Type', 'audio/mp3');
+    res.status(HttpStatus.OK);
+    res.redirect(filePath);
+  }
+
+  @Post('speech-to-text')
+  @UseInterceptors(CustomFileInterceptor)
+  async speechToText(
+    @CustomAudioUpload() file: Express.Multer.File,
+    @Body() speechToTextDto: SpeechToTextDto,
+  ) {
+    return await this.gptService.speechToText(file, speechToTextDto);
+  }
+
+  @Post('image-generation')
+  async imageGeneration(@Body() imageGenerationDto: ImageGenerationDto) {
+    return await this.gptService.imageGeneration(imageGenerationDto);
+  }
+
+  @Get('image-generation/:fileName')
+  async imageGetter(@Param('fileName') fileName: string, @Res() res: Response) {
+    //check that fileName is ending with png
+    const fileExtension = fileName.split('.').pop();
+
+    if (!fileExtension || fileExtension !== 'png') {
+      throw new BadRequestException('Invalid file extension, png was expected');
+    }
+
+    const fileStream = await this.gptService.fileGetter(fileName);
+    res.setHeader('Content-Type', 'image/png');
+    fileStream.pipe(res);
+  }
+
+  @Post('image-variation')
+  async imageVariation(@Body() imageVariationDto: ImageVariationDto) {
+    return await this.gptService.generateImageVariation(imageVariationDto);
   }
 }
