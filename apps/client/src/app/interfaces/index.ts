@@ -5,3 +5,4 @@ export * from './grammar-checker.response';
 export * from './pros-cons.response';
 export * from './translate.response';
 export * from './speech-to-text.response';
+export * from './question.reponse';

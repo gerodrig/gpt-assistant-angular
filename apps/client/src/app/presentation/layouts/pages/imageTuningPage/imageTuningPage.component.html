@@ -1,1 +1,54 @@
-<p>imageTuningPage works!</p>
+@if(originalImage()){
+    <div class="fixed z-10 flex flex-col items-center top-10 right-10 fade-in">
+        <span>Editing</span>
+        <img [src]="originalImage()" alt="Image to edit" class="object-contain border rounded-xl w-36 h-36" />
+
+        <button class="mt-2 btn-primary" (click)="generateVariation()">
+            Generate variation
+        </button>
+    </div>
+}
+
+<div class="chat-container">
+  <div class="chat-messages">
+    <div class="grid gap-y-2">
+      <!-- <span class="text-black">Grammar Checker</span> -->
+      <!-- Chat Messages -->
+      <app-gpt-message
+        text="Hello I am Geppeto, what image would you like to generate?"
+      />
+
+      @for (message of messages(); track $index) {
+        @if (message.isGpt) {
+          <app-gpt-message-editable-image
+            [text]="message.text"
+            [imageInfo]="message.imageInfo!"
+            (onSelectedImage)="handleImageChange($event, message.imageInfo!.url)"
+          />
+        } @else {
+          <app-my-message [text]="message.text" />
+        }
+      }
+
+      @if (isLoading()) {
+        <app-typing-loader />
+      }
+    </div>
+  </div>
+  <!-- Message box -->
+  <app-text-message-box
+    placeholder="Enter your text here"
+    (onMessage)="handleMessage($event)"
+  />
+
+  <!-- <app-text-message-box-file
+      placeholder="Enter your text here"
+      (onMessage)="handleMessageWithFile($event)"
+    />
+
+    <app-text-message-box-select
+      placeholder="Enter your text here"
+      [options]="[{ id: '1', name: 'one'}]"
+      (onMessage)="handleMessageWithSelect($event)"
+    /> -->
+</div>
